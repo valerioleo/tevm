@@ -39,6 +39,7 @@ export const captureSnapshotMetadata = async (client, vm) => {
 			blocksByNumber: [.../** @type {Map<any, any>} */ (vm.blockchain.blocksByNumber ?? new Map()).entries()],
 			blocksByTag: [.../** @type {Map<any, any>} */ (vm.blockchain.blocksByTag ?? new Map()).entries()],
 		},
+		loggingLevel: client.logger.level,
 		miningConfig: client.miningConfig,
 		receiptEntries,
 		txHashes: txs.map((tx) => bytesToHex(tx.hash())),
@@ -96,6 +97,7 @@ export const restoreSnapshotState = async (client, snapshot, vm) => {
 		client.setImpersonatedAccount(undefined)
 	}
 	client.setAutoImpersonate(Boolean(snapshot.autoImpersonate))
+	client.logger.level = snapshot.loggingLevel ?? client.logger.level
 	client.miningConfig = snapshot.miningConfig ?? client.miningConfig
 	client.setNextBlockTimestamp(
 		snapshot.nextBlockTimestamp !== undefined ? BigInt(snapshot.nextBlockTimestamp) : undefined,
