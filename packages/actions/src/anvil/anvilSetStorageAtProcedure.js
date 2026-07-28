@@ -1,4 +1,5 @@
 import { setAccountProcedure } from '../SetAccount/setAccountProcedure.js'
+import { anvilInvalidParams } from './anvilInvalidParams.js'
 
 /**
  * Request handler for anvil_setStorageAt JSON-RPC requests.
@@ -7,7 +8,14 @@ import { setAccountProcedure } from '../SetAccount/setAccountProcedure.js'
  */
 export const anvilSetStorageAtJsonRpcProcedure = (client) => {
 	return async (request) => {
-		request
+		if (!Array.isArray(request.params) || request.params.length !== 3) {
+			return /** @type {any} */ (
+				anvilInvalidParams(
+					request,
+					'Invalid parameters for anvil_setStorageAt. Expected an address, storage slot, and 32-byte value.',
+				)
+			)
+		}
 		const result = await setAccountProcedure(client)({
 			method: 'tevm_setAccount',
 			...(request.id !== undefined ? { id: request.id } : {}),
