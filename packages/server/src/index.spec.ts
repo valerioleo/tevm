@@ -10,6 +10,10 @@ describe('index exports', () => {
 		expect(indexExports.createServer).toBeDefined()
 	})
 
+	it('should export createWebSocketServer', () => {
+		expect(indexExports.createWebSocketServer).toBeDefined()
+	})
+
 	it('should export adapters', () => {
 		expect(indexExports.createExpressMiddleware).toBeDefined()
 		expect(indexExports.createNextApiHandler).toBeDefined()
